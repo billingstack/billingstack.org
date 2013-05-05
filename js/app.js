@@ -10,7 +10,7 @@ angular.module('billingstack', []).
 
 
 function ListsController($scope, $http) {
-    $http.get('mlmmj_lists.php').success(function(response) {
+    $http.get('http://hv1.billingstack.org/mlmmj_lists.php').success(function(response) {
         $scope.lists = response
     })
 
