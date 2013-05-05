@@ -35,6 +35,7 @@ class mlmmj
     var $delimiter;
     var $errors;
 
+
     function is_email($string="") 
 	{
 	    if (eregi("^[a-z0-9\._-]+".chr(64)."+[a-z0-9\._-]+\.+[a-z]{2,4}$", $string)) 
@@ -47,61 +48,40 @@ class mlmmj
 	    }
 	}
 
-    function error($string="")
-	{
-	    $this->errors = TRUE;
-//	    die($string);
+    function error($string="") {
+        die($string);
 	}
 
     function mlmmj()
 	{
+        $data = json_decode(file_get_contents('php://input'));
 	    // set mandatory vars...
 	    $this->errors = FALSE;
 	    $this->delimiter = "+";
 
-	    if (!isset($_POST["email"]) &&
-		!isset($_POST["mailinglist"]) &&
-		!isset($_POST["job"]) &&
-		!isset($_POST["redirect_success"]) &&
-		!isset($_POST["redirect_failure"]))
-	    {
-		$this->errors = TRUE;
-		if(isset($_POST["redirect_failure"]))
-		{
-		    header("Location: ".$_POST["redirect_failure"]);
-		    exit;
-		}
-		else
-		    die("An error occurred. Please check contrib/web/php-user/README for details.");
-	    }
-	    else
-	    {
-		if($this->is_email($_POST["email"]))
-		    $this->email = $_POST["email"];
-		else
+	    if (!isset($data->email) & !isset($data->mailinglist) && !isset($data->job)) {
+		    $this->error("Invalid request");
+        }
+		if($this->is_email($data->email)) {
+		    $this->email = $data->email;
+        } else {
 		    $this->error("ERROR: email is not a valid email address.");
+        }
 
-		if($this->is_email($_POST["mailinglist"]))
-		    $this->mailinglist = $_POST["mailinglist"];
-		else
+		if($this->is_email($data->mailinglist)) {
+		    $this->mailinglist = $data->mailinglist;
+        } else {
 		    $this->error("ERROR: mailinglist is not a valid email address.");
+        }
 		
-		$this->job = $_POST["job"];
+		$this->job = $data->job;
 		
-		if(!(($this->job == "subscribe") OR ($this->job == "unsubscribe")))
-		{
+		if(!(($this->job == "subscribe") OR ($this->job == "unsubscribe"))) {
 		    $this->error("ERROR: job unknown.");
 		}
 		
-		$this->redirect_failure = $_POST["redirect_failure"];
-		$this->redirect_success = $_POST["redirect_success"];
-
-	    }
-
 	    // now we should try to go ahead and {sub,unsub}scribe... ;)
 
-	    if(!$this->errors)
-	    {
 		// @ ^= char(64)
 		
 		$to = str_replace(chr(64),$this->delimiter.$this->job.chr(64),$this->mailinglist);
@@ -115,19 +95,8 @@ class mlmmj
 		$addheader .= "From: ".$this->email."\n";
 		$addheader .= "Cc: ".$this->email."\n";
 		
-		if(!mail($to, $subject, $body, $addheader))
+		if(!mail($to, $subject, $body, $addheader)) {
 		    $this->error($this->job." failed.");
-	    }
-
-	    if($this->errors)
-	    {
-		header("Location: ".$this->redirect_failure);
-		exit;
-	    }
-	    else
-	    {
-		header("Location: ".$this->redirect_success);
-		exit;
 	    }
 	}
 }

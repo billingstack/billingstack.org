@@ -13,7 +13,30 @@
 
     <div class="span4">
         <h2>Mailing Lists</h2>
-        <ul>
-        </ul>
+        <div ng-controller="ListsController">
+            <form name="listForm" class="form" ng-submit="doSubmit()">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" ng-model="email" required/>
+                <span class="error" ng-show="listForm.email.$error.required">required</span>
+                <span class="error" ng-show="listForm.email.$error.email">invalid email</span>
+
+                <div>
+                    <select ng-model="mailinglist" ng-options="ml for ml in lists" multiple ng-multiple="true"></select><br/>
+                    <input type="radio" name="job" value="subscribe" ng-model="job"/> Subscribe<br/>
+                    <input type="radio" name="job" value="unsubscribe" ng-model="job"/> Unsubscribe<br/>
+                    <hr/>
+                    <input type="submit" class="btn btn-primary btn-tiny"/>
+                </div>
+
+            </form>
+            E-Mail: {{email}}<br/>
+            Maillinglists: {{mailinglist}}<br/>
+            Job: {{job}}
+        </div>
+
+        <span ng-repeat="msg in messages">
+            <span></span>
+        </span>
     </div>
+
 </div>
