@@ -6,14 +6,10 @@
 </div>
 
 <div class="row">
-    <div class="span4">
-        <h2>Internet Relay Chat</h2>
-        #billingstack @ <a href="www.freenode.org">FreeNode</a>
-    </div>
 
     <div class="span4">
         <h2>Mailing Lists</h2>
-        <div ng-controller="ListsController">
+        <div ng-controller="ListsController" ng-show="false">
             <form name="listForm" class="form" ng-submit="doSubmit()">
                 <label for="email">Email</label>
                 <input id="email" name="email" type="email" ng-model="email" required/>
@@ -37,6 +33,24 @@
         <span ng-repeat="msg in messages">
             <span></span>
         </span>
+
+        <div>
+            <h4>Discuss</h4>
+            Subscribe: discuss+subscribe@billingstack.org<br/>
+            Unsubscribe: discuss+unsubscribe@billingstack.org<br/>
+        </div>
+        <div>
+            <h4>Developers</h4>
+            Subscribe: dev+subscribe@billingstack.org<br/>
+            Unsubscribe: dev+unsubscribe@billingstack.org<br/>
+        </div>
+    </div>
+    <div class="span4">
+        <h2>Internet Relay Chat</h2>
+        <b>#billingstack</b> @ <a href="http://www.freenode.org">FreeNode</a>
+
+        <h2>Social Medias</h2>
+        <b>Twitter:</b> <a href="http://twitter.com/billingstack">@billingstack</a>
     </div>
 
 </div>
