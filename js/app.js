@@ -31,7 +31,7 @@ function ListsController($scope, $http) {
             }
             $http({
                 method: 'POST',
-                url: 'mlmmj.php',
+                url: 'http://hv1.billingstack.org/mlmmj.php',
                 data: data,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
             .success(function(response) {
